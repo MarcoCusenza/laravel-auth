@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Post;
 
 class PostController extends Controller
@@ -27,7 +28,7 @@ class PostController extends Controller
    */
   public function create()
   {
-    //
+    return view("admin.posts.create");
   }
 
   /**
@@ -38,7 +39,23 @@ class PostController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    // prendo i dati del form
+    $data = $request->all();
+    // validazione
+    $request->validate([
+      "title" => "required|string|max:100",
+      "content" => "required|string",
+      "published" => "sometimes|accepted",
+    ]);
+    // aggiorno la risorsa con i nuovi dati
+    $newPost = new Post();
+    $newPost->title = $data["title"];
+    $newPost->slug = Str::slug($newPost->title, '-');
+    $newPost->content = $data["content"];
+    $newPost->published = isset($data["published"]);
+    $newPost->save();
+    // restituisco la pagina show della risorsa modificata
+    return redirect()->route('posts.show', $newPost->id);
   }
 
   /**
@@ -58,9 +75,9 @@ class PostController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function edit($id)
+  public function edit(Post $post)
   {
-    //
+    return view("admin.posts.edit", compact("post"));
   }
 
   /**
