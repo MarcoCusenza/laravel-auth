@@ -18,7 +18,6 @@
                                     <p class="card-text">{{ $post->content }}</p>
                                     <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary">Visualizza</a>
                                     <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">Modifica</a>
-                                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-danger">Elimina</a>
                                 </div>
                             </div>
                         @endforeach
